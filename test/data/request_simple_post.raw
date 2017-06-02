@@ -1,0 +1,13 @@
+POST /log/event HTTP/1.1
+Host: logx.optimizely.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:53.0) Gecko/20100101 Firefox/53.0
+Accept: */*
+Accept-Language: fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3
+Content-Type: application/json
+Referer: https://www.ebgames.ca/contest?utm_content=buffer19b09&utm_medium=Social&utm_source=Facebook&utm_campaign=Buffer
+Content-Length: 1099
+Origin: https://www.ebgames.ca
+DNT: 1
+Connection: close
+
+{"eventId":"13dd2504-5bfb-4124-aa1a-f4fc94e12a71","anonymizeIP":false,"timestamp":1496366435546,"revision":"65","clientEngine":"js","clientVersion":"0.42.1","projectId":"7595194362","accountId":"7564850953","activationId":"652e4806-8cb0-48ed-b71f-841760620581","sessionId":"72d31d70-b81f-4662-8eb7-1274a00ecd8b","visitorId":"oeu1496366435499r0.21643960798166362","eventFeatures":[],"eventMetrics":[],"relatedEvents":[],"layerStates":[],"userFeatures":[{"id":null,"type":"first_session","name":"","shouldIndex":true,"value":true},{"id":null,"type":"browserId","name":"","shouldIndex":true,"value":"ff"},{"id":null,"type":"campaign","name":"","shouldIndex":true,"value":"Buffer"},{"id":null,"type":"device","name":"","shouldIndex":true,"value":"desktop"},{"id":null,"type":"source_type","name":"","shouldIndex":true,"value":"campaign"},{"id":null,"type":"currentTimestamp","name":"","shouldIndex":true,"value":1496366435543},{"id":null,"type":"offset","name":"","shouldIndex":true,"value":240}],"activeViews":[],"isGlobalHoldback":false,"eventType":"client_activation","eventName":"client_activation"}

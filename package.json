@@ -1,0 +1,16 @@
+{
+  "name": "node-raw-request",
+  "version": "1.0.0",
+  "description": "A tool to send request using raw HTTP request. Edit",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha --recursive ./test"
+  },
+  "repository": "git@github.com:dalexanco/node-raw-request.git",
+  "author": "David-Alexandre COHEN <david.alex.cohen@gmail.com>",
+  "license": "GPLv3",
+  "dependencies": {
+    "chai": "^4.0.1",
+    "mocha": "^3.4.2"
+  }
+}
