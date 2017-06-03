@@ -26,6 +26,7 @@ program
   .option('-s, --save-output', 'Save http responses in \'output\' folder', 0)
   .option('-f, --format [format]', 'Define the format of the context file [format]', 'csv')
   .option('--fake', 'Do not send requests, just print the few first requests options', 0)
+  .option('--throttling <seconds>', 'Wait <seconds> between each requests', 0)
   .parse(process.argv)
 
 console.log('Starting parsing request..')
@@ -60,6 +61,7 @@ formatHandler(contextsPath)
           options.resolveWithFullResponse = true
           return (program.fake) ? options : rp(options)
         })
+        .then((response) => waitFor(program.throttling, response))
         .then((response) => {
           if (program.fake) {
             console.log(response)
@@ -80,3 +82,9 @@ formatHandler(contextsPath)
         })
     }, Promise.resolve())
   })
+
+function waitFor(seconds, result) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(result), seconds * 1000)
+  })
+}
