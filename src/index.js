@@ -1,6 +1,6 @@
 'use strict'
 
-const handlebarsParser = require('./parsing/handlebars-parser')
+const handlebarsParser = require('./handlebars/parser')
 const httpRawParser = require('./parsing/http-raw-parser')
 
 module.exports = {

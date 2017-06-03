@@ -25,6 +25,7 @@ program
   .option('-c, --contexts <file>', 'Define the path of the context file')
   .option('-s, --save-output', 'Save http responses in \'output\' folder', 0)
   .option('-f, --format [format]', 'Define the format of the context file [format]', 'csv')
+  .option('--fake', 'Do not send requests, just print the few first requests options', 0)
   .parse(process.argv)
 
 console.log('Starting parsing request..')
@@ -32,6 +33,9 @@ console.log('Template file : %s', program.template)
 console.log('Context file : %s', program.contexts)
 console.log('Context format : %s', program.format)
 console.log('Save ouput : %s', program.saveOutput)
+if (program.fake) {
+  console.log('FAKE MODE ON')
+}
 
 debug('Reading template file...')
 const templatePath = path.resolve(program.template)
@@ -54,20 +58,24 @@ formatHandler(contextsPath)
           debug('#%d Calling \'%s\'...', index, options.url)
           options.simple = false
           options.resolveWithFullResponse = true
-          return rp(options)
+          return (program.fake) ? options : rp(options)
         })
         .then((response) => {
-          const { statusCode, body } = response
-          console.log('#%d Received %d response (body length: %d)',
-            index,
-            statusCode,
-            body.length)
-          if (program.saveOutput) {
-            if (!fs.existsSync(OUTPUT_DIR)){
-              fs.mkdirSync(OUTPUT_DIR)
+          if (program.fake) {
+            console.log(response)
+          } else {
+            const { statusCode, body } = response
+            console.log('#%d Received %d response (body length: %d)',
+              index,
+              statusCode,
+              body.length)
+            if (program.saveOutput) {
+              if (!fs.existsSync(OUTPUT_DIR)){
+                fs.mkdirSync(OUTPUT_DIR)
+              }
+              const outputFile = path.resolve(OUTPUT_DIR, `${statusCode}_response_${index}.txt`)
+              fs.writeFileSync(outputFile, body, 'utf8')
             }
-            const outputFile = path.resolve(OUTPUT_DIR, `${statusCode}_response_${index}.txt`)
-            fs.writeFileSync(outputFile, body, 'utf8')
           }
         })
     }, Promise.resolve())
