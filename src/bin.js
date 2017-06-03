@@ -11,6 +11,7 @@ const csvContextsParser = require('./parsing/csv-contexts-parser')
 const { version } = require('../package.json')
 const rawRequestParser = require('./index')
 
+const OUTPUT_DIR = './output'
 const FORMAT_HANDLERS = {
   csv(filePath) {
     return csvContextsParser.parse(filePath)
@@ -22,6 +23,7 @@ program
   .usage('--template <template-file> --contexts <context-file>')
   .option('-t, --template <file>', 'Define the path of raw request template')
   .option('-c, --contexts <file>', 'Define the path of the context file')
+  .option('-s, --save-output', 'Save http responses in \'output\' folder', 0)
   .option('-f, --format [format]', 'Define the format of the context file [format]', 'csv')
   .parse(process.argv)
 
@@ -29,6 +31,7 @@ console.log('Starting parsing request..')
 console.log('Template file : %s', program.template)
 console.log('Context file : %s', program.contexts)
 console.log('Context format : %s', program.format)
+console.log('Save ouput : %s', program.saveOutput)
 
 debug('Reading template file...')
 const templatePath = path.resolve(program.template)
@@ -59,13 +62,13 @@ formatHandler(contextsPath)
             index,
             statusCode,
             body.length)
+          if (program.saveOutput) {
+            if (!fs.existsSync(OUTPUT_DIR)){
+              fs.mkdirSync(OUTPUT_DIR)
+            }
+            const outputFile = path.resolve(OUTPUT_DIR, `${statusCode}_response_${index}.txt`)
+            fs.writeFileSync(outputFile, body, 'utf8')
+          }
         })
     }, Promise.resolve())
   })
-
-// console.log('you ordered a pizza with:');
-// if (program.peppers) console.log('  - peppers');
-// if (program.pineapple) console.log('  - pineapple');
-// if (program.bbqSauce) console.log('  - bbq');
-// console.log('  - %s cheese', program.cheese);
-
