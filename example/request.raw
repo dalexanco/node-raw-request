@@ -1,12 +1,10 @@
 POST /log/event HTTP/1.1
-Host: www.example.com
+Host: logx.optimizely.com
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:53.0) Gecko/20100101 Firefox/53.0
 Accept: */*
 Accept-Language: fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3
-Content-Type: application/json
-Referer: https://www.example.com/
+Content-Type: application/{{key2}}
 Content-Length: 1099
-Origin: https://www.example.com
 DNT: 1
 Connection: close
 
