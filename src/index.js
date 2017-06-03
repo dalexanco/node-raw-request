@@ -8,11 +8,11 @@ module.exports = {
   parseContexts
 }
 
-function parse(request, context) {
+function parse(request, context, options={}) {
   return new Promise((resolve, reject) => {
     try {
       const parsedRequest = handlebarsParser.parse(request, context)
-      const requestOptions = httpRawParser.parse(parsedRequest)
+      const requestOptions = httpRawParser.parse(parsedRequest, options)
       return resolve(requestOptions)
     } catch(error) {
       reject(error)

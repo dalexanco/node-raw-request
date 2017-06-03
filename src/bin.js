@@ -25,8 +25,10 @@ program
   .option('-c, --contexts <file>', 'Define the path of the context file')
   .option('-s, --save-output', 'Save http responses in \'output\' folder', 0)
   .option('-f, --format [format]', 'Define the format of the context file [format]', 'csv')
+  .option('--https', 'Enable https', 0)
   .option('--fake', 'Do not send requests, just print the few first requests options', 0)
   .option('--throttling <seconds>', 'Wait <seconds> between each requests', 0)
+  .option('--verbose', 'Show additionnal log messages', 0)
   .parse(process.argv)
 
 console.log('Starting parsing request..')
@@ -48,23 +50,31 @@ if (!FORMAT_HANDLERS[program.format]) {
   throw new Error('Please provide a valid format option')
 }
 
+const parseOptions = {
+  https: !!(program.https)
+}
+
 console.log('Requesting...\n\n')
 const formatHandler = FORMAT_HANDLERS[program.format]
 formatHandler(contextsPath)
   .then((contexts) => {
     return contexts.reduce((agg, context, index) => {
       return agg
-        .then(() => rawRequestParser.parse(requestRaw, context))
+        .then(() => rawRequestParser.parse(requestRaw, context, parseOptions))
         .then((options) => {
           debug('#%d Calling \'%s\'...', index, options.url)
           options.simple = false
           options.resolveWithFullResponse = true
+          options.followAllRedirects = true
+          if (program.verbose) {
+            console.log('#%d Request options :\n%j', index, options)
+          }
           return (program.fake) ? options : rp(options)
         })
         .then((response) => waitFor(program.throttling, response))
         .then((response) => {
           if (program.fake) {
-            console.log(response)
+            console.log('#%d faked to send request', index)
           } else {
             const { statusCode, body } = response
             console.log('#%d Received %d response (body length: %d)',
